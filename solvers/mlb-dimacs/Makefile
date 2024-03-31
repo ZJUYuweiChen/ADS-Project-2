@@ -1,4 +1,4 @@
-CC = g++
+CC = g++ -std=c++11
 
 CCFLAGS = -ansi -Wall -O6 -DNDEBUG -I../../lib
 #CCFLAGS = -ansi -Wall -O6 -g -I../../lib
@@ -7,8 +7,8 @@ LDFLAGS =
 LOADLIBES = -lm        # the name used by the automatic linker rule
 MLBFLAGS = -DMLB
 
-SRCS = main.cc sp.cc smartq.cc parser_gr.cc timer.cc
-HDRS = sp.h nodearc.h smartq.h stack.h values.h
+SRCS = main.cc sp.cc smartq.cc fiboheap.cc binheap.cc  parser_gr.cc timer.cc
+HDRS = sp.h nodearc.h smartq.h fiboheap.h binheap.h stack.h values.h
 CODES = sq.exe mbp.exe sqC.exe mbpC.exe
 
 all: $(CODES)

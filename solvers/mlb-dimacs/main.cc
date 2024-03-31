@@ -19,9 +19,10 @@ extern int parse_p2p(long *sN_ad, long **source_array, long **sink_array, char *
 extern int parse_ss(long *sN_ad, long **source_array, char *aName);
 #endif
 
-#define SZ_DIK_SMARTQ   "Dijkstra with Smart Queues"
+#define SZ_DIK_HEAP   "Dijkstra with Fibonacci Heap"
 #define SZ_DIK_MLB      "Dijkstra with Multi-Level Buckets"
 #define SZ_BFS          "Breadth-First Search"
+
 
 int main(int argc, char **argv)
 {
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
    // figure out what algorithm to use
    cLevels = 0;
    logDelta = 0;
-   szAlgorithm = SZ_DIK_SMARTQ;
+   szAlgorithm = SZ_DIK_HEAP;
 #ifdef MLB
    szAlgorithm = SZ_DIK_MLB;
 #endif

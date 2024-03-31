@@ -1,17 +1,16 @@
 This file documents the SQ/SQP solvers
 
-------------------------------------------------------------
-MAKE OPTIONS FOR SHORTEST PATH CODES
 
-  SINGLE_PAIR
-     do a source to sink shortest path computation
-     (if no sink specified, do the single source computation)
-
-  CHECKSUM
-     collect more run-time operation counts (expensive)
-
--------------------------------------------------------------
 FILE DESCRIPTION
+    our new solver for the shortest path problem:
+    
+    fiboheap_core.h  template class for Fibonacci heap
+    binheap_core.h   template class for binominal queue
+    fiboheap.cc   implementations of the Fibonacci heap
+    binheap.cc    implementations of the binominal queue
+
+
+------------------------------------------------------------
 
     main.cc        the main program that drives tests
     smartq.cc      bucket datastructure classes
