@@ -5,6 +5,9 @@
 #include <assert.h>
 #include "sp.h"
 
+
+#define USE_BINHEAP
+
 void ArcLen(long cNodes, Node *nodes,
 	    long long *pMin /* = NULL */, long long *pMax /* = NULL */)
 // finds the max arc length and min arc length of a graph.
@@ -65,9 +68,11 @@ SP::SP(long cNodesGiven, Node *nodesGiven, ulong levels, ulong logDelta,
 		// 	&maxArcLen,
 		// 	levels, logDelta,
 		// 	cNodes, nodes);
+#ifdef USE_BINHEAP
+    binHeap = new BinoHeap_Wrapper(cNodes,nodes);
+#else
     fibHeap = new FiboHeap_Wrapper(cNodes, nodes);
-
-    //binHeap = new BinHeap_Wrapper(cNodes,nodes);
+#endif
   }
   else {
     BFSqueue = new Bucket;
@@ -153,23 +158,18 @@ void SP::BFSInit(Node *source)
 //        RETURNS the node that StopAt stopped at, or NULL if
 //     StopAt was NULL or no node passed StopAt\'s test.
 //-------------------------------------------------------------
-#ifdef SINGLE_PAIR
-bool SP::sp(Node *source, Node *sink)
-{
-  cCalls++;
 
-  return (smartq->dijkstra(source, sink, this));
-}
-#else
 void SP::sp(Node *source)
 {
    cCalls++;
 
    //smartq->dijkstra(source, this);
+#ifdef USE_BINHEAP
+   binHeap->dijkstra(source,this);
+#else
    fibHeap->dijkstra(source, this);
-   
-}
 #endif
+}
 //-------------------------------------------------------------
 // SP::PrintStats()
 //     Prints stats appropriate for an sp run.  First it prints
@@ -185,9 +185,11 @@ void SP::PrintStats(long tries)
 	  (float) cScans / (float) tries, 
 	  (float) cUpdates / (float) tries);
    //smartq->PrintStats(tries);
+#ifdef USE_BINHEAP
+    binHeap->printfStats();
+#else
     fibHeap->printfStats();
-    //binHeap->printfStats();
-
+#endif
 }
 
 void SP::initStats()

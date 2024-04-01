@@ -275,7 +275,7 @@ BinNode<ElementType>* BinHeap<ElementType>::ExtractMin(BinNode<ElementType>* hea
     head = Combine(head, Reverse(min->child));
 
     // delete and return.
-    delete min;
+    // delete min;
     return head;
 }
 
@@ -323,7 +323,7 @@ BinNode<ElementType>* BinHeap<ElementType>::Remove(BinNode<ElementType>* head, i
     head = Combine(head, Reverse(node->child));
 
     // Delete and return.
-    delete node;
+    // delete node;
     return head;
 }
 
@@ -535,7 +535,7 @@ void BinHeap<ElementType>::DestroyNode(BinNode<ElementType>* node)
     {
         suc = node->next;
         DestroyNode(node->child);
-        delete node;
+        //delete node;
         node = suc;
     }
 }
@@ -597,7 +597,7 @@ void BinHeap<ElementType>::Combine(BinHeap<ElementType>* binheap)
 template <class ElementType>
 BinNode<ElementType>* BinHeap<ElementType>::GetMin()
 {
-    BinNode<ElementType>* pre, * min;
+    BinNode<ElementType>* pre=NULL, * min=NULL;
     GetMin(m_root, pre, min);
     return min;
 }
@@ -617,21 +617,21 @@ void BinHeap<ElementType>::Print()
     if (m_root == nullptr)
         return;
 
-    std::cout << "== �����( ";
+    //std::cout << "== �����( ";
     p = m_root;
     while (p != nullptr)
     {
         std::cout << "B" << p->degree << " ";
         p = p->next;
     }
-    std::cout << ")����ϸ��Ϣ��" << std::endl;
+    //std::cout << ")����ϸ��Ϣ��" << std::endl;
 
     int i = 0;
     p = m_root;
     while (p != nullptr)
     {
         i++;
-        std::cout << i << ". ������B" << p->degree << ":" << std::endl;
+        //std::cout << i << ". ������B" << p->degree << ":" << std::endl;
         std::cout << "\t" << std::setw(2) << p->key << "(" << p->degree << ") is root" << std::endl;
 
         Print(p->child, p, 1);

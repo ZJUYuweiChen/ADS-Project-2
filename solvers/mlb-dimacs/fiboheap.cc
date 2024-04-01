@@ -66,8 +66,8 @@ FiboHeap_Wrapper::~FiboHeap_Wrapper()
 {
     instance->Destroy();
     delete instance;
-    delete _All_Dummy;
-    delete _All_FNode;
+    // delete _All_Dummy;
+    // delete _All_FNode;
 }
 
 FiboNode *FiboHeap_Wrapper::RemoveMin()
@@ -86,7 +86,6 @@ void FiboHeap_Wrapper::reInit(ulong N, Node *nodes)
     instance = new FibHeap<FibArc*>();
     for(int q=0;q<N;q++){
         FiboNode *fnode = _All_FNode+q;
-        initFNode(fnode);
         //use already exist node! much faster!
         instance->Insert(fnode);
     }
@@ -98,9 +97,16 @@ void FiboHeap_Wrapper::dijkstra(Node *source, SP *sp) // source是节点列表�
     FibArc *arc = NULL;          // last arc of the current node
     
     sp->curTime++;                    // 有多个测试点，用 time标记
-    const Node *allRaw = sp->getNodes();
+    Node *allRaw = sp->getNodes();
     // 将整个图装填到数据结构中
-    reInit(sp->getNodeNum(), sp->getNodes()); // 重新建堆
+    long nodeNum =sp->getNodeNum(),srcIndex = source-allRaw; 
+    for(int q=0;q<nodeNum;q++){
+        initFNode(_All_FNode+q); // 初始化所有节点
+        if(q == srcIndex)
+            _All_FNode[q].key = 0; // 将源点的距离设为0
+        
+    }
+    reInit(sp->getNodeNum(), allRaw); // 重新建堆
     _All_FNode[(source-allRaw)].key = 0; // 将源点的距离设为0
 
     source->tStamp = sp->curTime;
@@ -117,7 +123,7 @@ void FiboHeap_Wrapper::dijkstra(Node *source, SP *sp) // source是节点列表�
         currentNode->visited = true; // 已经从堆中取出，标记finish
         sp->cScans++; // 遍历顶点数 的 计数， 和 cRuns 类似，都是统计用
         // scan node
-        arc = currentNode->element->next; // last arc of the current node
+        arc = currentNode->element->next; // first arc of the current node
         
         while(arc !=NULL)
         {

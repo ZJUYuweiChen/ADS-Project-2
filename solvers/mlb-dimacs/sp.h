@@ -30,7 +30,7 @@ extern void ArcLen(long cNodes, Node *nodes,
 
 
 class FiboHeap_Wrapper;
-class BinHeap_Wrapper;
+class BinoHeap_Wrapper;
 
 class SP {
  private:
@@ -48,7 +48,7 @@ class SP {
    Bucket *BFSqueue;                 // for baseline BSF
 //** add new SP data structure here **//
    FiboHeap_Wrapper *fibHeap;         // for dijkstra_fibheap
-   BinHeap_Wrapper *binHeap;          // for dijkstra_binominalheap
+   BinoHeap_Wrapper *binHeap;          // for dijkstra_binominalheap
 
    
  public:

@@ -14,6 +14,7 @@ BinArc *_Bin_All_Dummy = NULL;
 BinoNode *_All_BNode = NULL;
 
 void initFNode(BinoNode *n){
+    //do not touch element arcs
     n->visited = false;
     n->key = 9999999;
     n->degree = 0;
@@ -40,37 +41,37 @@ void BinoHeap_Wrapper::initHeap(ulong N, Node *nodes)
         initFNode(curFNode);
         curFNode->key = curNode->dist;
         curFNode->element = curArc;
-
         //traverse all edge of this node.
-        Arc *lastArc = curNode->first - 1,*arc;
-        for ( arc = nodes->first; arc <= lastArc; arc++ )
+        Arc *lastArc = (curNode+1)->first - 1,*arc;
+        if(q == N-1) lastArc = curNode->first;
+        for ( arc = curNode->first; arc <= lastArc; arc++ )
         {
             BinArc * farc = (BinArc *)malloc(sizeof(BinArc)); //make new edge
             farc->head = _All_BNode + ((arc->head - nodes));
             farc->len = arc->len;
+            //cout<<"node"<<curFNode->key<<" len of arc:"<<farc->len<<endl;
             farc->next = NULL;
             curArc->next = farc;
             curArc = farc;
         }
         instance->Insert(curFNode);
     }
-    
-    cout<<"finish build heap:"<<_All_BNode->key<<endl;
+    //cout<<"finish build heap:"<<_All_BNode->key<<endl;
 }
 
 BinoHeap_Wrapper::~BinoHeap_Wrapper()
 {
     instance->Destroy();
     delete instance;
-    delete _Bin_All_Dummy;
-    delete _All_BNode;
+    // delete _Bin_All_Dummy;
+    // delete _All_BNode;
 }
 
 BinoNode *BinoHeap_Wrapper::RemoveMin()
 {
     
     BinoNode *res = instance->GetMin();
-    if (res == NULL)
+    if (!res)
         return NULL;
     instance->RemoveMin();
     return res;
@@ -78,14 +79,12 @@ BinoNode *BinoHeap_Wrapper::RemoveMin()
 
 void BinoHeap_Wrapper::reInit(ulong N, Node *nodes)
 {
-    //cout<<"reinit"<<endl;
     instance->Destroy();
     delete instance;
     instance = new BinHeap<BinArc*>();
     for(int q=0;q<N;q++){
         BinoNode *fnode = _All_BNode+q;
         //cout<<"reinit half: "<<fnode->key<<endl;
-        initFNode(fnode);
         //use already exist node! much faster!
         instance->Insert(fnode);
     }
@@ -97,14 +96,17 @@ void BinoHeap_Wrapper::dijkstra(Node *source, SP *sp) // source是节点列表�
     BinArc *arc = NULL;          // last arc of the current node
     
     sp->curTime++;                    // 有多个测试点，用 time标记
-    sp->initNode(source);
     Node * allRaw = sp->getNodes();
     // 将整个图装填到数据结构中
+    long nodeNum =sp->getNodeNum(),srcIndex = source-allRaw; 
+    for(int q=0;q<nodeNum;q++){
+        initFNode(_All_BNode+q); // 初始化所有节点
+        if(q == srcIndex)
+            _All_BNode[q].key = 0; // 将源点的距离设为0
+        
+    }
     reInit(sp->getNodeNum(), allRaw); // 重新建堆
-    _All_BNode[(source-allRaw)].key = 0; // 将源点的距离设为0
-
     source->tStamp = sp->curTime;
-    Node *nodeEnd = source + sp->getNodeNum();
     do
     {
         currentNode = RemoveMin(); // 在所有未确定节点堆中寻找最短节点，
@@ -113,11 +115,11 @@ void BinoHeap_Wrapper::dijkstra(Node *source, SP *sp) // source是节点列表�
             break; // 走完所有顶点
         }
         //cout<<"dist: "<<currentNode->key<<endl;
-
+        
         currentNode->visited = true; // 已经从堆中取出，标记finish
         sp->cScans++; // 遍历顶点数 的 计数， 和 cRuns 类似，都是统计用
         // scan node
-        arc = currentNode->element->next; // last arc of the current node
+        arc = currentNode->element->next; // first arc of the current node
         
         while(arc !=NULL)
         {
@@ -134,9 +136,12 @@ void BinoHeap_Wrapper::dijkstra(Node *source, SP *sp) // source是节点列表�
             }
             arc = arc->next;
         }
+        
     } while (1);
 }
 
 void BinoHeap_Wrapper::printfStats(){
-    instance->Print();
+    for(int q=0;q<4;q++){
+        cout<<_All_BNode[q].key<<endl;
+    }
 }

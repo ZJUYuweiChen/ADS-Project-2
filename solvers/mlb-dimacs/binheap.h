@@ -4,7 +4,6 @@
 #include "binheap_core.h"
 #include "nodearc.h"
 
-class BinHeap_Wrapper;
 #include "sp.h" //get shortest path wrapper class
 
 #ifndef ulong
