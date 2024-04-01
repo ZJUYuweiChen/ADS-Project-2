@@ -40,3 +40,14 @@ and then the result will in file
 ./results
 
 , which show graph information and running time.
+
+
+
+若读者对该平台感兴趣，可在
+http://www.diag.uniroma1.it/challenge9/code/ch9-1.1.tar.gz
+下载编译该项目，并按要求使用如下环境，：
+ - linux或MacOS环境
+ - 联网
+ - 支持 ftp/wget(若ftp不支持http get，可将wget取别名为ftp)，
+ - 支持g++
+ - 硬盘空间大于11G
